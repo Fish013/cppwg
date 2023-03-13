@@ -21,13 +21,16 @@ class CppWrapperGenerator(object):
                  source_includes=None, 
                  wrapper_root=None,
                  castxml_binary='castxml',
-                 package_info_path='package_info.yaml'):
+                 package_info_path='package_info.yaml',
+                 std_version='c++17'
+                 ):
 
         logger = logging.getLogger()
         logger.setLevel(logging.INFO)
 
         self.source_root = os.path.realpath(source_root)
         self.source_includes = source_includes
+        self.std_version = std_version
         self.wrapper_root = wrapper_root
         self.castxml_binary = castxml_binary
         self.package_info_path = package_info_path
@@ -87,7 +90,9 @@ class CppWrapperGenerator(object):
         source_parser = CppSourceParser(self.source_root,
                                         header_collection_path,
                                         self.castxml_binary,
-                                        self.source_includes)
+                                        self.source_includes,
+                                        self.std_version
+                                        )
         source_parser.parse()
         self.global_ns = source_parser.global_ns
         self.source_ns = source_parser.source_ns
