@@ -1,4 +1,5 @@
 from cppwg.writers import base_writer
+from pygccxml.declarations import declaration_utils
 
 
 class CppFreeFunctionWrapperWriter(base_writer.CppBaseWrapperWriter):
@@ -41,8 +42,11 @@ class CppFreeFunctionWrapperWriter(base_writer.CppBaseWrapperWriter):
                 if eachArg.default_value is not None:
                     default_args += ' = ' + eachArg.default_value
 
+        full_name = declaration_utils.full_name(self.free_function_info.decl)
+        
         method_dict = {'def_adorn': def_adorn,
-                       'function_name': self.free_function_info.decl.name,
+                       'full_function_name': full_name,
+                       'function_name': full_name.strip("::").replace("::", "_"),
                        'function_docs': '" "',
                        'default_args': default_args}
         output_string += self.wrapper_templates["free_function"].format(**method_dict)
